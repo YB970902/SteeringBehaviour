@@ -34,9 +34,13 @@ namespace SteeringBehaviour
 
             velocity += seekForce;
 
-            velocity.Normalize();
-            dirHeading = velocity;
-            velocity *= maxSpeed * Time.deltaTime;
+            dirHeading = velocity.normalized;
+            if (velocity.magnitude > maxSpeed)
+            {
+                velocity = dirHeading * maxSpeed;
+            }
+            
+            velocity *= Time.deltaTime;
 
             transform.position = Position + velocity;
         }
