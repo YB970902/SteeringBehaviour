@@ -46,8 +46,18 @@ namespace SteeringBehaviour
         /// </summary>
         private Vector2 Seek(Vector2 _target)
         {
-            // 목표로 하는 속도를 계산한다.
+            // 목표로 이동하는 속도를 계산한다.
             var desiredVelocity = (_target - Position).normalized * maxSpeed;
+            return desiredVelocity - velocity;
+        }
+
+        /// <summary>
+        /// 달아나기 행동
+        /// </summary>
+        private Vector2 Flee(Vector2 _target)
+        {
+            // 목표의 반대 방향으로 이동하는 속도를 계산한다. 
+            var desiredVelocity = (Position - _target).normalized * maxSpeed;
             return desiredVelocity - velocity;
         }
     }
