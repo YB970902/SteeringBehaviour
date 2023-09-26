@@ -25,19 +25,9 @@ namespace SteeringBehaviour
 
         private Vector2 Position => new Vector2(transform.position.x, transform.position.y);
 
-        /// <summary>
-        /// 찾기 행동
-        /// </summary>
-        private Vector2 Seek(Vector2 _target)
-        {
-            // 목표로 하는 속도를 계산한다.
-            var desiredVelocity = (_target - Position).normalized * maxSpeed;
-            return desiredVelocity - velocity;
-        }
-
         private void Update()
         {
-            // 현재 속도 측정
+            // 평소에 항상 이동중인 방향으로 이동한다.
             velocity = dirHeading * maxSpeed;
 
             var seekForce = Seek(blackBoard.TargetPosition);
@@ -49,6 +39,16 @@ namespace SteeringBehaviour
             velocity *= maxSpeed * Time.deltaTime;
 
             transform.position = Position + velocity;
+        }
+        
+        /// <summary>
+        /// 찾기 행동
+        /// </summary>
+        private Vector2 Seek(Vector2 _target)
+        {
+            // 목표로 하는 속도를 계산한다.
+            var desiredVelocity = (_target - Position).normalized * maxSpeed;
+            return desiredVelocity - velocity;
         }
     }
 }
