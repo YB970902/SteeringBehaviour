@@ -1,5 +1,5 @@
 
-using SteeringBehaviour.StateManager;
+using SB.StateManager;
 
 namespace Util.Define.Extension
 {

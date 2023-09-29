@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace SteeringBehaviour
+namespace SB
 {
     /// <summary>
     /// 조종행동에서 조종을 담당하는 에이전트이다.

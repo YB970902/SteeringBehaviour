@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SteeringBehaviour.StateManager
+namespace SB.StateManager
 {
     public class MoveState : AgentStateBase
     {

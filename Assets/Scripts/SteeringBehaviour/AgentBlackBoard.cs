@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace SteeringBehaviour
+namespace SB
 {
     /// <summary>
     /// 에이전트에게 전달해줘야하는 외부 데이터의 집합이다.

@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Util.Define.Extension;
 
-namespace SteeringBehaviour.StateManager
+namespace SB.StateManager
 {
     /// <summary>
     /// 에이전트 상태의 베이스
