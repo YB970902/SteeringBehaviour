@@ -1,10 +1,11 @@
 
 using SB.StateManager;
 
-namespace Util.Define.Extension
+namespace Util.Define
 {
-    public static class SteeringBehaviour
+    public static class DefineExtension
     {
+        // SteeringBehaviour
         public static AgentStateBase ToState(this Define.SteeringBehaviour.State _state)
         {
             switch (_state)

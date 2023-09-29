@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using Util.Define.Extension;
+using Util.Define;
 
 namespace SB.StateManager
 {
