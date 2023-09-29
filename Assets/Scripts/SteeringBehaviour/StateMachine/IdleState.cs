@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Util.Define;
 
-namespace SB.StateManager
+namespace SB.StateMachine
 {
     public class IdleState : AgentStateBase
     {
@@ -24,7 +24,7 @@ namespace SB.StateManager
                 return;
             }
             
-            stateManager.ChangeState(SteeringBehaviour.State.MoveToTarget);
+            stateMachine.ChangeState(SteeringBehaviour.State.MoveToTarget);
         }
     }
 }

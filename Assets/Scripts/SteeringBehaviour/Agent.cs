@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using SB.StateManager;
-using Unity.VisualScripting;
+using SB.StateMachine;
 using UnityEngine;
 using Util.Define;
 
@@ -27,20 +23,20 @@ namespace SB
         /// <summary> 에이전트의 현재 속도 </summary>
         private Vector2 velocity;
 
-        private AgentStateManager stateManager;
+        private AgentStateMachine stateMachine;
 
         public Vector2 Position => new Vector2(transform.position.x, transform.position.y);
 
         private void Start()
         {
-            stateManager = new AgentStateManager(this);
+            stateMachine = new AgentStateMachine(this);
             
-            stateManager.ChangeState(SteeringBehaviour.State.Idle);
+            stateMachine.ChangeState(SteeringBehaviour.State.Idle);
         }
 
         private void Update()
         {
-            stateManager.Update();
+            stateMachine.Update();
         }
         
         /// <summary>

@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Util.Define;
 
-namespace SB.StateManager
+namespace SB.StateMachine
 {
     /// <summary>
     /// 에이전트 상태의 베이스
@@ -14,7 +14,7 @@ namespace SB.StateManager
     public abstract class AgentStateBase
     {
         protected Agent agent;
-        protected AgentStateManager stateManager;
+        protected AgentStateMachine stateMachine;
 
         protected Vector2 ToTarget => agent.BlackBoard.TargetPosition - agent.Position;
 
@@ -23,10 +23,10 @@ namespace SB.StateManager
         /// <summary>
         /// 상태 생성직후 1회 호출
         /// </summary>
-        public void Init(Agent _agent, AgentStateManager _stateManager)
+        public void Init(Agent _agent, AgentStateMachine _stateMachine)
         {
             agent = _agent;
-            stateManager = _stateManager;
+            stateMachine = _stateMachine;
         }
 
         /// <summary>
@@ -64,12 +64,12 @@ namespace SB.StateManager
     /// 외부에서 현재 상태를 선택하고 주기적으로 업데이트를 호출해주면, 그 상태에 정의되어있는 행동들을 조합하여 에이전트를 동작시킨다.
     /// 하나의 에이전트가 하나의 매니저 인스턴스를 가지고 있다.
     /// </summary>
-    public class AgentStateManager
+    public class AgentStateMachine
     {
         private readonly List<AgentStateBase> stateList;
         private AgentStateBase currentState;
         
-        public AgentStateManager(Agent _agent)
+        public AgentStateMachine(Agent _agent)
         {
             int stateCount = (int)SteeringBehaviour.State.End;
             stateList = new List<AgentStateBase>(stateCount);

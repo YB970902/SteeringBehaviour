@@ -1,5 +1,5 @@
 
-using SB.StateManager;
+using SB.StateMachine;
 
 namespace Util.Define
 {

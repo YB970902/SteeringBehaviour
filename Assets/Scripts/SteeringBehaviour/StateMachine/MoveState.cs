@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Util.Define;
 
-namespace SB.StateManager
+namespace SB.StateMachine
 {
     public class MoveState : AgentStateBase
     {
@@ -28,7 +28,7 @@ namespace SB.StateManager
                 behaviour |= SteeringBehaviour.Behaviour.Arrive;
                 if (ToTarget.magnitude <= StopDistance)
                 {
-                    stateManager.ChangeState(SteeringBehaviour.State.Idle);
+                    stateMachine.ChangeState(SteeringBehaviour.State.Idle);
                     return;
                 }
             }
