@@ -41,25 +41,6 @@ namespace SB
         private void Update()
         {
             stateManager.Update();
-            
-            // // 평소에 항상 이동중인 방향으로 이동한다.
-            // velocity = dirHeading * maxSpeed;
-            //
-            // var seekForce = Seek(blackBoard.TargetPosition);
-            //
-            // velocity += seekForce;
-            //
-            // dirHeading = velocity.normalized;
-            // if (velocity.magnitude > maxSpeed)
-            // {
-            //     velocity = dirHeading * maxSpeed;
-            // }
-            //
-            // velocity *= Time.deltaTime;
-            //
-            // transform.position = Position + velocity;
-            
-            
         }
         
         /// <summary>
