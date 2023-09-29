@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Util.Define;
 
 namespace SB.StateManager
 {
@@ -18,7 +19,12 @@ namespace SB.StateManager
 
         public override void OnUpdate()
         {
+            if (ToTarget.magnitude <= StopDistance)
+            {
+                return;
+            }
             
+            stateManager.ChangeState(SteeringBehaviour.State.MoveToTarget);
         }
     }
 }

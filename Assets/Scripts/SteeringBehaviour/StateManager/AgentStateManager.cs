@@ -15,6 +15,10 @@ namespace SB.StateManager
     {
         protected Agent agent;
         protected AgentStateManager stateManager;
+
+        protected Vector2 ToTarget => agent.BlackBoard.TargetPosition - agent.Position;
+
+        protected const float StopDistance = 0.05f; 
         
         /// <summary>
         /// 상태 생성직후 1회 호출
@@ -67,11 +71,11 @@ namespace SB.StateManager
         
         public AgentStateManager(Agent _agent)
         {
-            int stateCount = (int)Util.Define.SteeringBehaviour.State.End;
+            int stateCount = (int)SteeringBehaviour.State.End;
             stateList = new List<AgentStateBase>(stateCount);
             for (int i = 0; i < stateCount; ++i)
             {
-                var state = ((Util.Define.SteeringBehaviour.State)i).ToState();
+                var state = ((SteeringBehaviour.State)i).ToState();
                 state.Init(_agent, this);
                 stateList.Add(state);
             }
@@ -79,7 +83,7 @@ namespace SB.StateManager
             currentState = null;
         }
 
-        public void ChangeState(Util.Define.SteeringBehaviour.State _state)
+        public void ChangeState(SteeringBehaviour.State _state)
         {
             currentState?.OnExit();
             currentState = stateList[(int)_state];

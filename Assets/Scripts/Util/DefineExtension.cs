@@ -10,8 +10,8 @@ namespace Util.Define
         {
             switch (_state)
             {
-                case Define.SteeringBehaviour.State.Idle: return null;
-                case Define.SteeringBehaviour.State.MoveToTarget: return null;
+                case Define.SteeringBehaviour.State.Idle: return new IdleState();
+                case Define.SteeringBehaviour.State.MoveToTarget: return new MoveState();
                 default: return null;
             }
         }

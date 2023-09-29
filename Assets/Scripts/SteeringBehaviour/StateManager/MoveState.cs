@@ -1,24 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Util.Define;
 
 namespace SB.StateManager
 {
     public class MoveState : AgentStateBase
     {
+        /// <summary> Arrive 행동을 시작할 거리 </summary>
+        private const float ArriveDistance = 5.0f;
+
         public override void OnEnter()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public override void OnExit()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public override void OnUpdate()
         {
-            throw new System.NotImplementedException();
+            var behaviour = SteeringBehaviour.Behaviour.Forward;
+            if (ToTarget.magnitude < ArriveDistance)
+            {
+                behaviour |= SteeringBehaviour.Behaviour.Arrive;
+                if (ToTarget.magnitude <= StopDistance)
+                {
+                    stateManager.ChangeState(SteeringBehaviour.State.Idle);
+                    return;
+                }
+            }
+            else
+            {
+                behaviour |= SteeringBehaviour.Behaviour.Seek;
+            }
+            
+            agent.Calculate(behaviour);
         }
     }
 }

@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using SB.StateManager;
 using Unity.VisualScripting;
 using UnityEngine;
+using Util.Define;
 
 namespace SB
 {
@@ -14,6 +16,8 @@ namespace SB
         /// <summary> 외부데이터 </summary>
         [SerializeField] AgentBlackBoard blackBoard;
 
+        public AgentBlackBoard BlackBoard => blackBoard;
+        
         /// <summary> 에이전트가 향하고있는 방향 벡터 </summary>
         private Vector2 dirHeading;
 
@@ -23,26 +27,39 @@ namespace SB
         /// <summary> 에이전트의 현재 속도 </summary>
         private Vector2 velocity;
 
-        private Vector2 Position => new Vector2(transform.position.x, transform.position.y);
+        private AgentStateManager stateManager;
+
+        public Vector2 Position => new Vector2(transform.position.x, transform.position.y);
+
+        private void Start()
+        {
+            stateManager = new AgentStateManager(this);
+            
+            stateManager.ChangeState(SteeringBehaviour.State.Idle);
+        }
 
         private void Update()
         {
-            // 평소에 항상 이동중인 방향으로 이동한다.
-            velocity = dirHeading * maxSpeed;
-
-            var seekForce = Seek(blackBoard.TargetPosition);
-
-            velocity += seekForce;
-
-            dirHeading = velocity.normalized;
-            if (velocity.magnitude > maxSpeed)
-            {
-                velocity = dirHeading * maxSpeed;
-            }
+            stateManager.Update();
             
-            velocity *= Time.deltaTime;
-
-            transform.position = Position + velocity;
+            // // 평소에 항상 이동중인 방향으로 이동한다.
+            // velocity = dirHeading * maxSpeed;
+            //
+            // var seekForce = Seek(blackBoard.TargetPosition);
+            //
+            // velocity += seekForce;
+            //
+            // dirHeading = velocity.normalized;
+            // if (velocity.magnitude > maxSpeed)
+            // {
+            //     velocity = dirHeading * maxSpeed;
+            // }
+            //
+            // velocity *= Time.deltaTime;
+            //
+            // transform.position = Position + velocity;
+            
+            
         }
         
         /// <summary>
@@ -86,6 +103,46 @@ namespace SB
             var desiredVelocity = dirToTarget * speed;
 
             return desiredVelocity - velocity;
+        }
+        
+        /// <summary>
+        /// 동작해야하는 행동의 플래그를 넘기면 그에 맞는 힘을 만들어서 동작한다. 
+        /// </summary>
+        public void Calculate(SteeringBehaviour.Behaviour _behaviour)
+        {
+            if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.Forward))
+            {
+                velocity = dirHeading * maxSpeed;
+            }
+            else
+            {
+                velocity = Vector2.zero;
+            }
+
+            if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.Seek))
+            {
+                velocity += Seek(blackBoard.TargetPosition);
+            }
+
+            if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.Flee))
+            {
+                velocity += Flee(blackBoard.TargetPosition);
+            }
+
+            if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.Arrive))
+            {
+                velocity += Arrive(blackBoard.TargetPosition);
+            }
+            
+            dirHeading = velocity.normalized;
+            if (velocity.magnitude > maxSpeed)
+            {
+                velocity = dirHeading * maxSpeed;
+            }
+            
+            velocity *= Time.deltaTime;
+
+            transform.position = Position + velocity;
         }
     }
 }
