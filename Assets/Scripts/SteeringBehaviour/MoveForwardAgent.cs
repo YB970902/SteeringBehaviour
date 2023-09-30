@@ -13,6 +13,9 @@ namespace SB
         protected override void Start()
         {
             base.Start();
+
+            agentInfo = new MoveForwardAgentInfo();
+            
             dirHeading = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
             stateMachine.AddState(SteeringBehaviour.State.MoveForward);
             stateMachine.ChangeState(SteeringBehaviour.State.MoveForward);

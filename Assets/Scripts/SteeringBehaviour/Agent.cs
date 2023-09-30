@@ -17,13 +17,11 @@ namespace SB
         /// <summary> 에이전트가 향하고있는 방향 벡터 </summary>
         protected Vector2 dirHeading;
 
-        /// <summary> 에이전트의 최대 속력 </summary>
-        [SerializeField] float maxSpeed;
-
         /// <summary> 에이전트의 현재 속도 </summary>
         private Vector2 velocity;
 
         protected AgentStateMachine stateMachine;
+        protected AgentInfo agentInfo;
 
         public Vector2 Position => new Vector2(transform.position.x, transform.position.y);
 
@@ -43,7 +41,7 @@ namespace SB
         private Vector2 Seek(Vector2 _target)
         {
             // 목표로 이동하는 속도를 계산한다.
-            var desiredVelocity = (_target - Position).normalized * maxSpeed;
+            var desiredVelocity = (_target - Position).normalized * agentInfo.MaxSpeed;
             return desiredVelocity - velocity;
         }
 
@@ -53,7 +51,7 @@ namespace SB
         private Vector2 Flee(Vector2 _target)
         {
             // 목표의 반대 방향으로 이동하는 속도를 계산한다. 
-            var desiredVelocity = (Position - _target).normalized * maxSpeed;
+            var desiredVelocity = (Position - _target).normalized * agentInfo.MaxSpeed;
             return desiredVelocity - velocity;
         }
 
@@ -74,7 +72,7 @@ namespace SB
             const float decelerationTweaker = 0.1f;
             
             // 목적지와 멀수록 속도가 크게 줄어들다가 가까워질수록 조금씩 줄어든다.
-            var speed = Mathf.Min(dist / decelerationTweaker, maxSpeed);
+            var speed = Mathf.Min(dist / decelerationTweaker, agentInfo.MaxSpeed);
             var desiredVelocity = dirToTarget * speed;
 
             return desiredVelocity - velocity;
@@ -87,7 +85,7 @@ namespace SB
         {
             if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.Forward))
             {
-                velocity = dirHeading * maxSpeed;
+                velocity = dirHeading * agentInfo.MaxSpeed;
             }
             else
             {
@@ -110,9 +108,9 @@ namespace SB
             }
             
             dirHeading = velocity.normalized;
-            if (velocity.magnitude > maxSpeed)
+            if (velocity.magnitude > agentInfo.MaxSpeed)
             {
-                velocity = dirHeading * maxSpeed;
+                velocity = dirHeading * agentInfo.MaxSpeed;
             }
             
             velocity *= Time.deltaTime;

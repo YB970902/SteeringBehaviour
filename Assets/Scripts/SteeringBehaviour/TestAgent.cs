@@ -13,6 +13,8 @@ namespace SB
         protected override void Start()
         {
             base.Start();
+
+            agentInfo = new TestAgentInfo();
             
             stateMachine.AddState(SteeringBehaviour.State.Idle);
             stateMachine.AddState(SteeringBehaviour.State.MoveToTarget);
