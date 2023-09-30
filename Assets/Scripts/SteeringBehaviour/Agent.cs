@@ -1,5 +1,6 @@
 using SB.StateMachine;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Util.Define;
 
 namespace SB
@@ -15,24 +16,25 @@ namespace SB
         public AgentBlackBoard BlackBoard => blackBoard;
         
         /// <summary> 에이전트가 향하고있는 방향 벡터 </summary>
-        protected Vector2 dirHeading;
+        public Vector2 DirHeading { get; protected set; }
 
         /// <summary> 에이전트의 현재 속도 </summary>
-        private Vector2 velocity;
+        private Vector2 Velocity { get; set; }
 
-        protected AgentStateMachine stateMachine;
-        protected AgentInfo agentInfo;
+        public AgentStateMachine StateMachine { get; private set; }
+        protected AgentInfo AgentInfo { get; set; }
 
         public Vector2 Position => new Vector2(transform.position.x, transform.position.y);
 
         protected virtual void Start()
         {
-            stateMachine = new AgentStateMachine(this);
+            blackBoard.Init(this);
+            StateMachine = new AgentStateMachine(this);
         }
 
         private void Update()
         {
-            stateMachine.Update();
+            StateMachine.Update();
         }
         
         /// <summary>
@@ -41,8 +43,8 @@ namespace SB
         private Vector2 Seek(Vector2 _target)
         {
             // 목표로 이동하는 속도를 계산한다.
-            var desiredVelocity = (_target - Position).normalized * agentInfo.MaxSpeed;
-            return desiredVelocity - velocity;
+            var desiredVelocity = (_target - Position).normalized * AgentInfo.MaxSpeed;
+            return desiredVelocity - Velocity;
         }
 
         /// <summary>
@@ -51,8 +53,8 @@ namespace SB
         private Vector2 Flee(Vector2 _target)
         {
             // 목표의 반대 방향으로 이동하는 속도를 계산한다. 
-            var desiredVelocity = (Position - _target).normalized * agentInfo.MaxSpeed;
-            return desiredVelocity - velocity;
+            var desiredVelocity = (Position - _target).normalized * AgentInfo.MaxSpeed;
+            return desiredVelocity - Velocity;
         }
 
         /// <summary>
@@ -72,10 +74,35 @@ namespace SB
             const float decelerationTweaker = 0.1f;
             
             // 목적지와 멀수록 속도가 크게 줄어들다가 가까워질수록 조금씩 줄어든다.
-            var speed = Mathf.Min(dist / decelerationTweaker, agentInfo.MaxSpeed);
+            var speed = Mathf.Min(dist / decelerationTweaker, AgentInfo.MaxSpeed);
             var desiredVelocity = dirToTarget * speed;
 
-            return desiredVelocity - velocity;
+            return desiredVelocity - Velocity;
+        }
+
+        /// <summary>
+        /// 이동중인 적을 회피하는 행동
+        /// </summary>
+        private Vector2 Avoid(Agent _targetAgent)
+        {
+            // 타겟이 이동중이지 않다면 회피하지 않는다.
+            if (_targetAgent.Velocity.magnitude <= float.Epsilon)
+            {
+                return Vector2.zero;
+            }
+            
+            // 타겟 에이전트가 이동할것이라고 예측하는 목표 지점
+            var targetMovePoint = _targetAgent.Position + _targetAgent.DirHeading * _targetAgent.AgentInfo.MaxSpeed;
+
+            var fleeToTarget = Position - targetMovePoint;
+            var distToTarget = fleeToTarget.magnitude;
+            // 타겟 에이전트가 이동하려는 위치가 내 위치와 너무 멀다면 회피하지 않는다.
+            if (distToTarget < AgentInfo.Radius + _targetAgent.AgentInfo.Radius)
+            {
+                return Vector2.zero;
+            }
+
+            return fleeToTarget.normalized * (distToTarget - AgentInfo.Radius - _targetAgent.AgentInfo.Radius);
         }
 
         /// <summary>
@@ -85,37 +112,45 @@ namespace SB
         {
             if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.Forward))
             {
-                velocity = dirHeading * agentInfo.MaxSpeed;
+                Velocity = DirHeading * AgentInfo.MaxSpeed;
             }
             else
             {
-                velocity = Vector2.zero;
+                Velocity = Vector2.zero;
             }
 
             if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.Seek))
             {
-                velocity += Seek(blackBoard.TargetPosition);
+                Velocity += Seek(blackBoard.TargetPosition);
             }
 
             if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.Flee))
             {
-                velocity += Flee(blackBoard.TargetPosition);
+                Velocity += Flee(blackBoard.TargetPosition);
             }
 
             if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.Arrive))
             {
-                velocity += Arrive(blackBoard.TargetPosition);
+                Velocity += Arrive(blackBoard.TargetPosition);
             }
-            
-            dirHeading = velocity.normalized;
-            if (velocity.magnitude > agentInfo.MaxSpeed)
-            {
-                velocity = dirHeading * agentInfo.MaxSpeed;
-            }
-            
-            velocity *= Time.deltaTime;
 
-            transform.position = Position + velocity;
+            if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.Avoid))
+            {
+                foreach (var agent in blackBoard.CollideAgentList)
+                {
+                    Velocity += Avoid(agent);
+                }
+            }
+            
+            DirHeading = Velocity.normalized;
+            if (Velocity.magnitude > AgentInfo.MaxSpeed)
+            {
+                Velocity = DirHeading * AgentInfo.MaxSpeed;
+            }
+            
+            Velocity *= Time.deltaTime;
+
+            transform.position = Position + Velocity;
         }
     }
 }

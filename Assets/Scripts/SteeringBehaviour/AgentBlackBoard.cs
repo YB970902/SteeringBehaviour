@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using Util.Define;
 
 namespace SB
 {
@@ -17,11 +19,48 @@ namespace SB
         /// <summary> 에이전트가 이동해야하는 타겟의 위치 </summary>
         public Vector2 TargetPosition { get; private set; }
         
+        public LinkedList<Agent> CollideAgentList { get; private set; }
+
+        private Agent agent;
+        
+        public void Init(Agent _agent)
+        {
+            agent = _agent;
+        }
+
+        private void Awake()
+        {
+            CollideAgentList = new LinkedList<Agent>();
+        }
+
+        private void OnTriggerEnter2D(Collider2D _other)
+        {
+            var agent = _other.transform.GetComponent<Agent>();
+            if (agent == null)
+            {
+                return;
+            }
+
+            CollideAgentList.AddLast(agent);
+        }
+
+        private void OnTriggerExit2D(Collider2D _other)
+        {
+            var agent = _other.transform.GetComponent<Agent>();
+            if (agent == null)
+            {
+                return;
+            }
+
+            CollideAgentList.Remove(agent);
+        }
+
         private void Update()
         {
             if (Input.GetMouseButtonDown(0))
             {
                 TargetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                agent.StateMachine.ChangeState(SteeringBehaviour.State.MoveToTarget);
             }
         }
     }

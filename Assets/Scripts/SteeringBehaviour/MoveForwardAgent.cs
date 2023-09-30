@@ -14,11 +14,11 @@ namespace SB
         {
             base.Start();
 
-            agentInfo = new MoveForwardAgentInfo();
+            AgentInfo = new MoveForwardAgentInfo();
             
-            dirHeading = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
-            stateMachine.AddState(SteeringBehaviour.State.MoveForward);
-            stateMachine.ChangeState(SteeringBehaviour.State.MoveForward);
+            DirHeading = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
+            StateMachine.AddState(SteeringBehaviour.State.MoveForward);
+            StateMachine.ChangeState(SteeringBehaviour.State.MoveForward);
         }
     }
 }

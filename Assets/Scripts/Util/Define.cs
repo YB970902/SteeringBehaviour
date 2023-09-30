@@ -28,6 +28,7 @@ namespace Util.Define
             Seek = 1 << 1,
             Flee = 1 << 2,
             Arrive = 1 << 3,
+            Avoid = 1 << 4,
         }
     }
 }

@@ -19,12 +19,7 @@ namespace SB.StateMachine
 
         public override void OnUpdate()
         {
-            if (ToTarget.magnitude <= StopDistance)
-            {
-                return;
-            }
-            
-            stateMachine.ChangeState(SteeringBehaviour.State.MoveToTarget);
+            agent.Calculate(SteeringBehaviour.Behaviour.Avoid);
         }
     }
 }

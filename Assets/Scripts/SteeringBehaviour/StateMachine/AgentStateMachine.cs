@@ -92,6 +92,11 @@ namespace SB.StateMachine
 
         public void ChangeState(SteeringBehaviour.State _state)
         {
+            if (stateList.ContainsKey(_state) == false)
+            {
+                return;
+            }
+            
             currentState?.OnExit();
             currentState = stateList[_state];
             currentState.OnEnter();

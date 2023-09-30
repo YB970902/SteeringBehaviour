@@ -14,11 +14,11 @@ namespace SB
         {
             base.Start();
 
-            agentInfo = new TestAgentInfo();
+            AgentInfo = new TestAgentInfo();
             
-            stateMachine.AddState(SteeringBehaviour.State.Idle);
-            stateMachine.AddState(SteeringBehaviour.State.MoveToTarget);
-            stateMachine.ChangeState(SteeringBehaviour.State.Idle);
+            StateMachine.AddState(SteeringBehaviour.State.Idle);
+            StateMachine.AddState(SteeringBehaviour.State.MoveToTarget);
+            StateMachine.ChangeState(SteeringBehaviour.State.Idle);
         }
     }
 }
