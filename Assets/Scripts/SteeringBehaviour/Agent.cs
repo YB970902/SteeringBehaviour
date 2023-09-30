@@ -91,18 +91,17 @@ namespace SB
                 return Vector2.zero;
             }
             
-            // 타겟 에이전트가 이동할것이라고 예측하는 목표 지점
-            var targetMovePoint = _targetAgent.Position + _targetAgent.DirHeading * _targetAgent.AgentInfo.MaxSpeed;
+            // 타겟의 위치와 타겟이 이동하려는 위치사이의 선으로부터 가장 가까운 지점 찾기.
+            var fromTarget = Position - _targetAgent.Position;
+            var distFromStart = Vector2.Dot(fromTarget, _targetAgent.DirHeading);
+            var closestPoint = _targetAgent.Position + _targetAgent.DirHeading * Mathf.Clamp(distFromStart, 0, _targetAgent.AgentInfo.MaxSpeed);
 
-            var fleeToTarget = Position - targetMovePoint;
-            var distToTarget = fleeToTarget.magnitude;
-            // 타겟 에이전트가 이동하려는 위치가 내 위치와 너무 멀다면 회피하지 않는다.
-            if (distToTarget < AgentInfo.Radius + _targetAgent.AgentInfo.Radius)
-            {
-                return Vector2.zero;
-            }
+            // 가장 가까운지점으로부터 도망치는 힘을 계산한다. 이때 가까운 지점으로부터 가까울수록 빠르게 도망친다.
+            var fleeToTarget = Position - closestPoint;
+            var fleeMaxForce = AgentInfo.Radius + _targetAgent.AgentInfo.Radius;
+            var fleeForce = Mathf.Clamp((fleeMaxForce - fleeToTarget.magnitude) / fleeMaxForce, 0f, 1f);
 
-            return fleeToTarget.normalized * (distToTarget - AgentInfo.Radius - _targetAgent.AgentInfo.Radius);
+            return fleeToTarget.normalized * AgentInfo.MaxSpeed;
         }
 
         /// <summary>
