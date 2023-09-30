@@ -20,6 +20,8 @@ namespace SB
         public Vector2 TargetPosition { get; private set; }
         
         public LinkedList<Agent> CollideAgentList { get; private set; }
+        
+        public Vector2 ForwardDirection { get; set; }
 
         private Agent agent;
         

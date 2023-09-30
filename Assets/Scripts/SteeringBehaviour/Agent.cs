@@ -105,6 +105,14 @@ namespace SB
         }
 
         /// <summary>
+        /// 무조건 앞으로 가는 행동. 테스트용으로 추가
+        /// </summary>
+        private Vector2 FixedForward()
+        {
+            return BlackBoard.ForwardDirection * AgentInfo.MaxSpeed;
+        }
+
+        /// <summary>
         /// 동작해야하는 행동의 플래그를 넘기면 그에 맞는 힘을 만들어서 동작한다. 
         /// </summary>
         public void Calculate(SteeringBehaviour.Behaviour _behaviour)
@@ -140,6 +148,11 @@ namespace SB
                 {
                     importantVelocity += Avoid(agent);
                 }
+            }
+
+            if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.FixedForward))
+            {
+                normalVelocity += FixedForward();
             }
 
             // 두 속도의 합이 최대 속력보다 크면, 가중치에 맞게 곱한다. 
