@@ -66,27 +66,34 @@ namespace SB.StateMachine
     /// </summary>
     public class AgentStateMachine
     {
-        private readonly List<AgentStateBase> stateList;
+        private readonly Dictionary<SteeringBehaviour.State, AgentStateBase> stateList;
         private AgentStateBase currentState;
+
+        private Agent agent;
         
         public AgentStateMachine(Agent _agent)
         {
-            int stateCount = (int)SteeringBehaviour.State.End;
-            stateList = new List<AgentStateBase>(stateCount);
-            for (int i = 0; i < stateCount; ++i)
-            {
-                var state = ((SteeringBehaviour.State)i).ToState();
-                state.Init(_agent, this);
-                stateList.Add(state);
-            }
-            
+            agent = _agent;
+            stateList = new Dictionary<SteeringBehaviour.State, AgentStateBase>();
             currentState = null;
+        }
+
+        public void AddState(SteeringBehaviour.State _state)
+        {
+            if (stateList.ContainsKey(_state))
+            {
+                return;
+            }
+
+            var state = _state.ToState();
+            state.Init(agent, this);
+            stateList[_state] = state;
         }
 
         public void ChangeState(SteeringBehaviour.State _state)
         {
             currentState?.OnExit();
-            currentState = stateList[(int)_state];
+            currentState = stateList[_state];
             currentState.OnEnter();
         }
 

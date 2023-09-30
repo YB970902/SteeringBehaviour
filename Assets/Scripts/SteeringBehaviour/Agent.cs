@@ -10,12 +10,12 @@ namespace SB
     public class Agent : MonoBehaviour
     {
         /// <summary> 외부데이터 </summary>
-        [SerializeField] AgentBlackBoard blackBoard;
+        [SerializeField] protected AgentBlackBoard blackBoard;
 
         public AgentBlackBoard BlackBoard => blackBoard;
         
         /// <summary> 에이전트가 향하고있는 방향 벡터 </summary>
-        private Vector2 dirHeading;
+        protected Vector2 dirHeading;
 
         /// <summary> 에이전트의 최대 속력 </summary>
         [SerializeField] float maxSpeed;
@@ -23,15 +23,13 @@ namespace SB
         /// <summary> 에이전트의 현재 속도 </summary>
         private Vector2 velocity;
 
-        private AgentStateMachine stateMachine;
+        protected AgentStateMachine stateMachine;
 
         public Vector2 Position => new Vector2(transform.position.x, transform.position.y);
 
-        private void Start()
+        protected virtual void Start()
         {
             stateMachine = new AgentStateMachine(this);
-            
-            stateMachine.ChangeState(SteeringBehaviour.State.Idle);
         }
 
         private void Update()
@@ -81,7 +79,7 @@ namespace SB
 
             return desiredVelocity - velocity;
         }
-        
+
         /// <summary>
         /// 동작해야하는 행동의 플래그를 넘기면 그에 맞는 힘을 만들어서 동작한다. 
         /// </summary>
