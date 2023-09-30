@@ -30,9 +30,10 @@ namespace Util.Define
             Arrive = 1 << 3,
             Avoid = 1 << 4,
             FixedForward = 1 << 5,
+            AvoidAndMove = 1 << 6,
         }
 
-        public const float NormalVelocityRatio = 0.3f;
-        public const float ImportantVelocityRatio = 0.7f;
+        public const float NormalVelocityRatio = 0.4f;
+        public const float ImportantVelocityRatio = 0.6f;
     }
 }

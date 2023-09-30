@@ -104,6 +104,32 @@ namespace SB
             return fleeToTarget.normalized * (fleeForce * AgentInfo.MaxSpeed);
         }
 
+        private Vector2 AvoidAndMove(Agent _targetAgent)
+        {
+            // 타겟이 이동중이지 않다면 회피하지 않는다.
+            if (_targetAgent.Velocity.magnitude <= float.Epsilon)
+            {
+                return Vector2.zero;
+            }
+            
+            // 타겟의 위치와 타겟이 이동하려는 위치사이의 선으로부터 가장 가까운 지점 찾기.
+            var fromTarget = Position - _targetAgent.Position;
+            var distFromStart = Vector2.Dot(fromTarget, _targetAgent.DirHeading);
+            var closestPoint = _targetAgent.Position + _targetAgent.DirHeading * Mathf.Clamp(distFromStart, 0, _targetAgent.AgentInfo.MaxSpeed);
+
+            // 가장 가까운지점으로부터 도망치는 힘을 계산한다.
+            var fleeToTarget = Position - closestPoint;
+            
+            // 상대 에이전트와의 거리가 가까울수록 강하게 움직인다.
+            var fleeMaxForce = AgentInfo.Radius + _targetAgent.AgentInfo.Radius;
+            var fleeForce = Mathf.Clamp((fleeMaxForce - fromTarget.magnitude) / fleeMaxForce, 0f, 1f);
+            
+            // 현재 향하려는 방향에 피하려는 방향을 더한다.
+            var desiredVelocity = DirHeading + fleeToTarget.normalized;
+            
+            return desiredVelocity.normalized * (fleeForce * AgentInfo.MaxSpeed);
+        }
+
         /// <summary>
         /// 무조건 앞으로 가는 행동. 테스트용으로 추가
         /// </summary>
@@ -125,6 +151,11 @@ namespace SB
             if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.Forward))
             {
                 normalVelocity = DirHeading * AgentInfo.MaxSpeed;
+            }
+            
+            if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.FixedForward))
+            {
+                normalVelocity += FixedForward();
             }
 
             if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.Seek))
@@ -149,10 +180,13 @@ namespace SB
                     importantVelocity += Avoid(agent);
                 }
             }
-
-            if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.FixedForward))
+            
+            if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.AvoidAndMove))
             {
-                normalVelocity += FixedForward();
+                foreach (var agent in blackBoard.CollideAgentList)
+                {
+                    importantVelocity += AvoidAndMove(agent);
+                }
             }
 
             // 두 속도의 합이 최대 속력보다 크면, 가중치에 맞게 곱한다. 
