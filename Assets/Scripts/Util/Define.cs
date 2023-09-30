@@ -14,6 +14,7 @@ namespace Util.Define
         {
             Idle = 0,
             MoveToTarget,
+            MoveForward,
             End, // 가장 마지막에 위치해야 한다.
         }
 
