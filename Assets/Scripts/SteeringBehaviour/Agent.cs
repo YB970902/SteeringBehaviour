@@ -101,7 +101,7 @@ namespace SB
             var fleeMaxForce = AgentInfo.Radius + _targetAgent.AgentInfo.Radius;
             var fleeForce = Mathf.Clamp((fleeMaxForce - fleeToTarget.magnitude) / fleeMaxForce, 0f, 1f);
 
-            return fleeToTarget.normalized * AgentInfo.MaxSpeed;
+            return fleeToTarget.normalized * (fleeForce * AgentInfo.MaxSpeed);
         }
 
         /// <summary>
