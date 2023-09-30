@@ -13,7 +13,6 @@ namespace Manager
     /// </summary>
     public class AgentTester : MonoBehaviour
     {
-        
         [SerializeField] Agent prefabMoveForwardAgent;
         [SerializeField] Agent prefabTestAgent;
 
@@ -22,13 +21,13 @@ namespace Manager
         private Rect cameraArea;
 
         /// <summary> 직선 방향으로 움직이기만 하는 에이전트의 수 </summary>
-        private const int MoveForwardAgentCount = 10;
+        [SerializeField] int moveForwardAgentCount = 10;
         /// <summary> 테스트 하려는 에이전트의 수 </summary>
         private const int TestAgentCount = 1;
 
         private void Start()
         {
-            agents = new List<Agent>(MoveForwardAgentCount + TestAgentCount);
+            agents = new List<Agent>(moveForwardAgentCount + TestAgentCount);
 
             var cameraOffset = 1.0f;
 
@@ -40,7 +39,7 @@ namespace Manager
             cameraArea.height = screenRT.y - screenLB.y + cameraOffset * 2;
 
 
-            for (int i = 0; i < MoveForwardAgentCount; ++i)
+            for (int i = 0; i < moveForwardAgentCount; ++i)
             {
                 var agent = Instantiate(prefabMoveForwardAgent);
                 var position = new Vector3();
