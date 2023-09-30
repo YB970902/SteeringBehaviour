@@ -109,43 +109,54 @@ namespace SB
         /// </summary>
         public void Calculate(SteeringBehaviour.Behaviour _behaviour)
         {
+            // 낮은 가중치의 속도
+            Vector2 normalVelocity = Vector2.zero;
+            // 높은 가중치의 속도
+            Vector2 importantVelocity = Vector2.zero;
+
             if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.Forward))
             {
-                Velocity = DirHeading * AgentInfo.MaxSpeed;
-            }
-            else
-            {
-                Velocity = Vector2.zero;
+                normalVelocity = DirHeading * AgentInfo.MaxSpeed;
             }
 
             if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.Seek))
             {
-                Velocity += Seek(blackBoard.TargetPosition);
+                normalVelocity += Seek(blackBoard.TargetPosition);
             }
 
             if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.Flee))
             {
-                Velocity += Flee(blackBoard.TargetPosition);
+                normalVelocity += Flee(blackBoard.TargetPosition);
             }
 
             if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.Arrive))
             {
-                Velocity += Arrive(blackBoard.TargetPosition);
+                normalVelocity += Arrive(blackBoard.TargetPosition);
             }
 
             if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.Avoid))
             {
                 foreach (var agent in blackBoard.CollideAgentList)
                 {
-                    Velocity += Avoid(agent);
+                    importantVelocity += Avoid(agent);
                 }
+            }
+
+            // 두 속도의 합이 최대 속력보다 크면, 가중치에 맞게 곱한다. 
+            if (normalVelocity.magnitude + importantVelocity.magnitude > AgentInfo.MaxSpeed)
+            {
+                normalVelocity *= SteeringBehaviour.NormalVelocityRatio;
+                importantVelocity *= SteeringBehaviour.ImportantVelocityRatio;
+
+                Velocity = normalVelocity + importantVelocity;
+                Velocity = Velocity.normalized * AgentInfo.MaxSpeed;
+            }
+            else
+            {
+                Velocity = normalVelocity + importantVelocity;
             }
             
             DirHeading = Velocity.normalized;
-            if (Velocity.magnitude > AgentInfo.MaxSpeed)
-            {
-                Velocity = DirHeading * AgentInfo.MaxSpeed;
-            }
             
             Velocity *= Time.deltaTime;
 
