@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4437468030925458262}
   - component: {fileID: 1687899116760364106}
-  - component: {fileID: 4437468030925458260}
+  - component: {fileID: -6507934293708365541}
   - component: {fileID: 4519624497110397008}
   - component: {fileID: 3921993637862203213}
   m_Layer: 0
@@ -132,8 +132,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b14a65e7783424ef9936cccfb32644e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blackBoard: {fileID: 4437468030925458260}
---- !u!114 &4437468030925458260
+  blackBoard: {fileID: -6507934293708365541}
+--- !u!114 &-6507934293708365541
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4437468030925458261}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 388d5b47a8b624b809b9246e16cc5c99, type: 3}
+  m_Script: {fileID: 11500000, guid: 0a3988d8cfe624983b0dfb46c5431517, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!50 &4519624497110397008

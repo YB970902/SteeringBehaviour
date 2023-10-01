@@ -15,22 +15,8 @@ namespace SB
     /// 데이터를 전달하는 입장이기 때문에, 에이전트는 오로직 데이터만 받는다.
     /// 데이터의 가공이나 특정 로직의 동작은 내부에서 스스로 수행하거나, 외부에서부터 호출된다.
     /// </summary>
-    public class AgentBlackBoard : MonoBehaviour
+    public class TestAgentBlackBoard : AgentBlackBoard
     {
-        /// <summary> 에이전트가 이동해야하는 타겟의 위치 </summary>
-        public Vector2 TargetPosition { get; protected set; }
-        
-        public LinkedList<Agent> CollideAgentList { get; protected set; }
-        
-        public Vector2 ForwardDirection { get; set; }
-
-        private Agent agent;
-        
-        public void Init(Agent _agent)
-        {
-            agent = _agent;
-        }
-
         private void Awake()
         {
             CollideAgentList = new LinkedList<Agent>();
@@ -56,23 +42,6 @@ namespace SB
             }
 
             CollideAgentList.Remove(agent);
-        }
-
-        private void Update()
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                TargetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                agent.StateMachine.ChangeState(SteeringBehaviour.State.MoveToTarget);
-            }
-        }
-
-        public void SetRandomTargetPosition()
-        {
-            var screenLB = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0));
-            var screenRT = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
-
-            TargetPosition = new Vector2(Random.Range(screenLB.x, screenRT.x), Random.Range(screenLB.y, screenRT.y));
         }
     }
 }
