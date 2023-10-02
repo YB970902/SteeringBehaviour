@@ -139,7 +139,7 @@ namespace SB
             var fleeVelocity = Position - _targetAgent.Position;
             var force = Mathf.Clamp(dist - fleeVelocity.magnitude / dist, 0f, 1f);
             
-            return (Position - _targetAgent.Position).normalized * (force * dist);
+            return fleeVelocity.normalized * (force * dist);
         }
 
         /// <summary>
@@ -212,8 +212,8 @@ namespace SB
             // 두 속도의 합이 최대 속력보다 크면, 가중치에 맞게 곱한다. 
             if (normalVelocity.magnitude + importantVelocity.magnitude > AgentInfo.MaxSpeed)
             {
-                normalVelocity *= SteeringBehaviour.NormalVelocityRatio;
-                importantVelocity *= SteeringBehaviour.ImportantVelocityRatio;
+                float normalSpeed = Mathf.Max(AgentInfo.MaxSpeed - importantVelocity.magnitude, 0f);
+                normalVelocity = normalVelocity.normalized * normalSpeed;
 
                 Velocity = normalVelocity + importantVelocity;
                 Velocity = Velocity.normalized * AgentInfo.MaxSpeed;
