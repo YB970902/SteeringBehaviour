@@ -18,8 +18,8 @@ namespace SB
             
             DirHeading = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
             blackBoard.ForwardDirection = DirHeading;
-            StateMachine.AddState(SteeringBehaviour.State.MoveForward);
-            StateMachine.ChangeState(SteeringBehaviour.State.MoveForward);
+            StateMachine.AddState(SteeringBehaviour.State.MoveRandom);
+            StateMachine.ChangeState(SteeringBehaviour.State.MoveRandom);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace SB
         private Vector2 Velocity { get; set; }
 
         public AgentStateMachine StateMachine { get; private set; }
-        protected AgentInfo AgentInfo { get; set; }
+        public AgentInfo AgentInfo { get; protected set; }
 
         public Vector2 Position => new Vector2(transform.position.x, transform.position.y);
 

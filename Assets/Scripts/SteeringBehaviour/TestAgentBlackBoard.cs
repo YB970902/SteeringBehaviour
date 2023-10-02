@@ -22,26 +22,9 @@ namespace SB
             CollideAgentList = new LinkedList<Agent>();
         }
 
-        private void OnTriggerEnter2D(Collider2D _other)
+        private new void Update()
         {
-            var agent = _other.transform.GetComponent<Agent>();
-            if (agent == null)
-            {
-                return;
-            }
-
-            CollideAgentList.AddLast(agent);
-        }
-
-        private void OnTriggerExit2D(Collider2D _other)
-        {
-            var agent = _other.transform.GetComponent<Agent>();
-            if (agent == null)
-            {
-                return;
-            }
-
-            CollideAgentList.Remove(agent);
+            
         }
     }
 }
