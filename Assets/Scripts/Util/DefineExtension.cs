@@ -1,5 +1,6 @@
 
 using SB.StateMachine;
+using UnityEngine;
 
 namespace Util.Define
 {
@@ -13,7 +14,10 @@ namespace Util.Define
                 case SteeringBehaviour.State.Idle: return new IdleState();
                 case SteeringBehaviour.State.MoveToTarget: return new MoveState();
                 case SteeringBehaviour.State.MoveForward: return new MoveForwardState();
-                default: return null;
+                case SteeringBehaviour.State.MoveRandom: return new MoveRandomState();
+                default:
+                    Debug.LogError($"상태 {_state.ToString()}의 반환 클래스가 정해지지 않았습니다.");
+                    return null;
             }
         }
     }

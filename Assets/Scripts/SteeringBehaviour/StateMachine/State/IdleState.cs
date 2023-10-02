@@ -19,7 +19,7 @@ namespace SB.StateMachine
 
         public override void OnUpdate()
         {
-            agent.Calculate(SteeringBehaviour.Behaviour.Avoid);
+            agent.Calculate(SteeringBehaviour.Behaviour.Avoid | SteeringBehaviour.Behaviour.Evade);
         }
     }
 }

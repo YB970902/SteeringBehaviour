@@ -131,6 +131,18 @@ namespace SB
         }
 
         /// <summary>
+        /// 상대와 겹치지 않도록 피하는 행동
+        /// </summary>
+        private Vector2 Evade(Agent _targetAgent)
+        {
+            var dist = AgentInfo.Radius + _targetAgent.AgentInfo.Radius;
+            var fleeVelocity = Position - _targetAgent.Position;
+            var force = Mathf.Clamp(dist - fleeVelocity.magnitude / dist, 0f, 1f);
+            
+            return (Position - _targetAgent.Position).normalized * (force * dist);
+        }
+
+        /// <summary>
         /// 무조건 앞으로 가는 행동. 테스트용으로 추가
         /// </summary>
         private Vector2 FixedForward()
@@ -186,6 +198,14 @@ namespace SB
                 foreach (var agent in blackBoard.CollideAgentList)
                 {
                     importantVelocity += AvoidAndMove(agent);
+                }
+            }
+
+            if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.Evade))
+            {
+                foreach (var agent in blackBoard.CollideAgentList)
+                {
+                    importantVelocity += Evade(agent);
                 }
             }
 

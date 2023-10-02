@@ -15,6 +15,7 @@ namespace Util.Define
             Idle = 0,
             MoveToTarget,
             MoveForward,
+            MoveRandom,
             End, // 가장 마지막에 위치해야 한다.
         }
 
@@ -31,9 +32,10 @@ namespace Util.Define
             Avoid = 1 << 4,
             FixedForward = 1 << 5,
             AvoidAndMove = 1 << 6,
+            Evade = 1 << 7,
         }
 
-        public const float NormalVelocityRatio = 0.4f;
-        public const float ImportantVelocityRatio = 0.6f;
+        public const float NormalVelocityRatio = 0.35f;
+        public const float ImportantVelocityRatio = 0.65f;
     }
 }
