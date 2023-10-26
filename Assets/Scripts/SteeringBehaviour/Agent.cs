@@ -137,9 +137,10 @@ namespace SB
         {
             var dist = AgentInfo.Radius + _targetAgent.AgentInfo.Radius;
             var fleeVelocity = Position - _targetAgent.Position;
-            var force = Mathf.Clamp(dist - fleeVelocity.magnitude / dist, 0f, 1f);
+
+            if (fleeVelocity.magnitude > dist) return Vector2.zero;
             
-            return fleeVelocity.normalized * (force * dist);
+            return fleeVelocity.normalized * Mathf.Min(dist - fleeVelocity.magnitude, AgentInfo.MaxSpeed);
         }
 
         /// <summary>
