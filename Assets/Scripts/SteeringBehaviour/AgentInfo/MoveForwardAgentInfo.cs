@@ -9,7 +9,7 @@ namespace SB
         public MoveForwardAgentInfo()
         {
             Radius = 0.5f;
-            MaxSpeed = 3.0f;
+            MaxSpeed = 2.0f;
         }
     }
 }

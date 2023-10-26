@@ -13,7 +13,7 @@ namespace SB
         public TestAgentInfo()
         {
             Radius = 0.5f;
-            MaxSpeed = 5f;
+            MaxSpeed = 2f;
         }
     }
 }
