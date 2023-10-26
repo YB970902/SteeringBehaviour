@@ -159,6 +159,8 @@ namespace SB
             Vector2 normalVelocity = Vector2.zero;
             // 높은 가중치의 속도
             Vector2 importantVelocity = Vector2.zero;
+            // 무조건 먼저 수행되어야 하는 속도
+            Vector2 warningVelocity = Vector2.zero;
 
             if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.Forward))
             {
@@ -209,8 +211,27 @@ namespace SB
                 }
             }
 
+            if (_behaviour.HasFlag(SteeringBehaviour.Behaviour.EvadeEnemy))
+            {
+                foreach (var agent in blackBoard.CollideAgentList)
+                {
+                    warningVelocity += Evade(agent);
+                }
+            }
+
+            if (warningVelocity != Vector2.zero) // 무조건 먼저 수행되어야 하는 힘이 있는경우 무조건 이곳을 수행한다. 
+            {
+                // 최대치를 넘긴경우, 최대치 내로 막는다.
+                if (warningVelocity.magnitude > AgentInfo.MaxSpeed)
+                {
+                    warningVelocity.Normalize();
+                    warningVelocity *= AgentInfo.MaxSpeed;
+                }
+
+                Velocity = warningVelocity;
+            }
             // 두 속도의 합이 최대 속력보다 크면, 가중치에 맞게 곱한다. 
-            if (normalVelocity.magnitude + importantVelocity.magnitude > AgentInfo.MaxSpeed)
+            else if (normalVelocity.magnitude + importantVelocity.magnitude > AgentInfo.MaxSpeed)
             {
                 float normalSpeed = Mathf.Max(AgentInfo.MaxSpeed - importantVelocity.magnitude, 0f);
                 normalVelocity = normalVelocity.normalized * normalSpeed;

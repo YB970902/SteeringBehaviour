@@ -33,6 +33,7 @@ namespace Util.Define
             FixedForward = 1 << 5,
             AvoidAndMove = 1 << 6,
             Evade = 1 << 7,
+            EvadeEnemy = 1 << 8,
         }
 
         public const float NormalVelocityRatio = 0.35f;

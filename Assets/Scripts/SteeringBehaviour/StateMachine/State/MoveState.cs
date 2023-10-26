@@ -22,7 +22,7 @@ namespace SB.StateMachine
 
         public override void OnUpdate()
         {
-            var behaviour = SteeringBehaviour.Behaviour.Forward | SteeringBehaviour.Behaviour.AvoidAndMove | SteeringBehaviour.Behaviour.Evade;
+            var behaviour = SteeringBehaviour.Behaviour.Forward | SteeringBehaviour.Behaviour.AvoidAndMove | SteeringBehaviour.Behaviour.EvadeEnemy;
             if (ToTarget.magnitude < ArriveDistance)
             {
                 behaviour |= SteeringBehaviour.Behaviour.Arrive;
